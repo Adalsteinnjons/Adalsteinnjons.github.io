@@ -1,0 +1,92 @@
+I"�<h1 id="week-2">Week 2</h1>
+
+<p>You can’t query the same IV more than once. Else you can distinguish immediately from the PRG and the truly random.</p>
+
+<h2 id="rc4">RC4</h2>
+
+<p><img src="https://i.imgur.com/ST9mi7i.png" alt="rc4" /></p>
+
+<p>Beautiful and simple.<br />
+Byte oriented stream cipher.</p>
+
+<h2 id="a51">A5/1</h2>
+
+<p>Stream cipher was used in mobile phones.<br />
+First mass market deployment of cryptography.<br />
+Very friendly for hardware because it has LFSR (Linear Feedback shift register).<br />
+Was widely deplyed, now broken.</p>
+
+<h2 id="modern-stream-ciphers">Modern Stream ciphers</h2>
+
+<p>AES and 3DES in counter mode.</p>
+
+<p>ChaCha (not as fast as AES but more secure against side-channel attacks)</p>
+
+<p>Keystream reuse is a big security issue in stream ciphers. Since you could recover something by checking for “the”.</p>
+
+<h2 id="block-ciphers">Block ciphers</h2>
+
+<p>Encrypts blocks of bits.<br />
+Typically blocksize: 64 bits (DES) or 128 bits (AES)
+Typical Key size = same as block size.</p>
+
+<p>Keysize is the primary security factor. <br />
+Block size is the secondary indicator of security level.<br />
+Cache timing attacks not possible if AES is implemented in the HW.<br />
+If you need a block cipher, use AES.</p>
+
+<h3 id="security-for-block-ciphers">Security for block ciphers</h3>
+
+<p>All attacks try to recover the key here:</p>
+
+<ul>
+  <li>
+    <p>Known plaintext attack: He gets many plaintexts and ciphertext pairs.<br />
+Example: IPsec protocol. He know how the header looks like which gets encrypted.</p>
+  </li>
+  <li>
+    <p>Chosen Plaintext attack: He can choose many plaintexts that will get encrypted under a Key<br />
+Javascript in the browser attack: get the victim to visit your website first while he is visiting another. Inject some javascript in it which allows you to make requests to the server the client is visiting, then you can choose what gets sent and you see the sent encrypted packets.</p>
+  </li>
+  <li>
+    <p>Chosen ciphertext attack: He gets to choose many ciphertexts and gets the corresponding plaintexts P under the key k.<br />
+Ipsec protocol again.</p>
+  </li>
+</ul>
+
+<p>For all 3 attack scenarios, a few plaintext/ciphertext pairs enable an <strong>exhaustive key search</strong>.<br />
+(If the keylength is not too large)</p>
+
+<p>Design target block cipher: No attack is faster than the exhaustive key search (else we throw that block cipher away).</p>
+
+<h2 id="exercise-2">Exercise 2</h2>
+
+<h3 id="problem-1-key-stream-generator">Problem 1: Key Stream Generator</h3>
+
+<p>a.) Why is the attacker not allowed to repeat IVs in its queries?<br />
+Adversaries that can repeat IVs can trivially distinguish real from random.<br />
+The purpose of the IV is that the same plaintext will not be encoded into the same ciphertext. (It is similar to the state of a PRG, where for the same seed and state the same text gets encoded to the same ciphertext.)<br />
+If the same IV is sent in 2 queries then the KSG will output the same stream of data but the truly random box will still output pure random stream. So the Distinguisher could send all queries with the same IV and when a stream is identical to one that came before, then it knows that it is the KSG.<br />
+Same IV –&gt; Same Keystream</p>
+
+<p>b.)<br />
+l is the seed space.<br />
+It seems that the G’ generator can be reduced to the G generator, since even though the seedspace is bigger (l+m), it only uses the first l bits as the seed which is the same as G. Since G is secure G’ is also secure.</p>
+
+<p>c.)<br />
+Is a KSG not the same as a PRG with nonces/seed-state?<br />
+KSG | PRG<br />
+–|–
+Key | Seed
+IV | Nonce/seed-state (optinal)
+efficient, deterministic algorithm | efficient, deterministic algorithm<br />
+Input: key K and an initialisation vector IV |  a short “seed”
+outputs an (infinite) stream of bits KS = KS 0 ,KS 1 ,… called the keystream | outputs a pseudo-random string (usually longer than input, added length = stretch)</p>
+
+<p>A PRG is secure if the Adversary can’t distinguish between truly random and pseudo random.<br />
+A KSG is secure if the Adversary can’t distinguish, even if the provides the IV. But since in the definition H(K,IV) := G(K||IV) the IV is part of the seed in the PRG, which the adversary knows.<br />
+So if we have a PRG where the key is empty, only the IV is the seed, that is still a secure PRG, but it would fail the KSG test since the adversary could use the IV as a key for a PRG itself and predict the outcomes.</p>
+
+<h3 id="problem-2-block-ciphers">Problem 2: Block Ciphers</h3>
+
+:ET
