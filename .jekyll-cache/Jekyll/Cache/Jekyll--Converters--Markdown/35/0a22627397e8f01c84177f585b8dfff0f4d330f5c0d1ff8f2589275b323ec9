@@ -1,0 +1,269 @@
+I"i&<h1 id="week-1">Week 1</h1>
+
+<p>By the end of the course you should be able to:</p>
+
+<ul>
+  <li>Explain what cryptography can be used for</li>
+  <li>Describe cryptographic mechanisms for providing each of the core security services</li>
+  <li>Appreciate differences between types of cryptographic mechanisms and see in which situations they are most useful.</li>
+  <li>Identify what mechanisms are necessary to “secure” an application</li>
+  <li>See the limitations of cryptography and how to support it withing a full security architecture</li>
+</ul>
+
+<p>Course Overview:</p>
+
+<ol>
+  <li>Symmetric crypto: Stream ciphers, block ciphers, hash functions, MACs, authenticated encryption</li>
+  <li>Asymmetric crypto: Public key encryption, digital signatures, PKI and key management, elliptic curve cryptography.</li>
+  <li>Authentication and Key exchange protocols</li>
+  <li>The TLS protocol</li>
+</ol>
+
+<p>Confidentiality: Data cannot be viewed by unauthorized entity.<br />
+Integrity: Data has not been altered with.<br />
+Entity authentication: The given entity is involved and not someone else (identification).<br />
+Data origin authentication: The entity that sent the message did send the message.<br />
+Non-repudiation: Preventing the denial of previous actions.</p>
+
+<h2 id="secure-channels">Secure Channels</h2>
+
+<p>Main application: Secure communication, when 2 entities can exchange messages over an insecure channel.</p>
+
+<ul>
+  <li>The messages should remain confidential</li>
+  <li>Able to check origin of messages</li>
+  <li>Detect when messages are deleted</li>
+  <li>Detect when messages are re-ordered</li>
+</ul>
+
+<h2 id="from-caesar-cipher-to-one-time-pad">From Caesar cipher to One-time Pad</h2>
+
+<p>Symmetric encryption:<br />
+<img src="https://i.imgur.com/vEAKv8I.png" alt="symmetric" /></p>
+
+<blockquote>
+  <p>The security should only rely of on secrecy of keys used. Not on the system details. Don’t rely on security through obscurity. It will get broken. But it can help further improve security.</p>
+</blockquote>
+
+<h3 id="caesar-cipher">Caesar Cipher</h3>
+
+<p><img src="https://i.imgur.com/pkHQDGT.png" alt="caesar-cipher" /></p>
+
+<p>Problems: Only 26 possible keys: we can brute force it. And we could also use Frequency Analysis (the letters in a language are not uniformly distributed).</p>
+
+<h3 id="vigenere-cipher">Vigenere Cipher</h3>
+
+<p>Caesar cipher chaining. We use multiple caesar ciphers in a row.<br />
+<img src="https://i.imgur.com/TGymEei.png" alt="Vigenere_cipher" /></p>
+
+<p>The keysize can be any of 26^length_of_plaintext. –&gt; Brute force becomes difficult and frequency as well.<br />
+But statistical method is possible:<br />
+<img src="https://i.imgur.com/XO6xejA.png" alt="vigenere" /><br />
+When a word appears twice or more in the plaintext, such as “the”, then it is possible to see the same ciphertext for that word if the keysize is smaller than half of the plaintext (If the key is repeated such that the word is encoded the same way twice or more).</p>
+
+<h3 id="mathematical-form">Mathematical form</h3>
+
+<h4 id="caesar-cipher-1">Caesar cipher</h4>
+
+<p>Plaintext P = P0, P1, P2, …: a sequence of integers between 0 and 25.<br />
+Key K = integer between 0 and 25.<br />
+Encryption: C(i) = P(i) + K mod 26<br />
+Decryption: P(i) = C(i) - K mod 26</p>
+
+<h4 id="vigenere-cipher-1">Vigenere cipher</h4>
+
+<p>Plaintext P = same as above
+Key K = K0, K1, … K(t-1) = sequence of <strong>t</strong> integers between 0 and 25.<br />
+Encryption: C(i) = P(i) + K (i mod t) mod 26
+Decryption: P(i) = C(i) - K (i mod t) mod 26</p>
+
+<h4 id="the-one-time-pad">The one-time Pad</h4>
+
+<p>Plaintext = same<br />
+Key K = K0, K1, K2, ……. as long as the plaintext!<br />
+Encryption: C(i) = P(i) + K(i) mod 26<br />
+Decrpytion: P(i) = C(i) - K(i) mod 26</p>
+
+<p>The key length is the same as the plaintext length. People were traveling with a whole suitcase that contained the key in order to decrypt a long message somewhere.</p>
+
+<p>We have <strong>perfect security</strong>: The ciphertext leaks nothing more about the plaintext except for its length. (If the keys are uniformly random).</p>
+
+<p>Pr(P=p|C=c) = Pr(P=p)<br />
+If we know the ciphertext, that doesn’t increase the probability of finding the plaintext.</p>
+
+<p>Example:<br />
+<img src="https://i.imgur.com/MUwnkHX.png" alt="cats" /><br />
+Each 7 letter big cat has the same probability.</p>
+
+<p>Practicalities:<br />
+The Key K = k0, k1, k2,… is a sequence of integers between 0 and 25.<br />
+In reality represented as <strong>bits</strong>:<br />
+<img src="https://i.imgur.com/dDFdDgx.png" alt="one-time" /></p>
+
+<p>It is unbreakable but:</p>
+
+<ul>
+  <li>The key needs to be as long as the message</li>
+  <li>The key needs to be distributed in advance (Key management problem)</li>
+  <li>Once the key is in place, it enables a single plaintext to be sent securely, at any point in the future</li>
+  <li>If you use it more than once. then we can XOR the ciphertext which removes the key and leaves the XOR of the plaintext.</li>
+</ul>
+
+<h2 id="stream-ciphers">Stream Ciphers</h2>
+
+<p>They try to replicate the properties of the one-time pad, but using only a short key.</p>
+
+<p>As a key we use the seed in a Pseudo-random generator.<br />
+Pseudo random: Appears to be truly random.</p>
+
+<p>We can measure how good the PRG is by measuring the advantage an adversary has when distinguishing between a PRG and a truly random sequence.<br />
+The advantage of distinguisher = probability(b’=b) - 1/2.<br />
+b’ = the prediction of the distinguisher.<br />
+b = bit that says if it was a PRG or actual random<br />
+<img src="https://i.imgur.com/ay4cSn4.png" alt="PRG" /><br />
+We take the absolute value because the bad PRG can easily be converted to a good PRG.</p>
+
+<p>A PRG is said to be secure <strong>iff for all</strong> disdinguishers D, the advantage is small.</p>
+
+<p>A PRG is sait to be  (t, epsilon)-secure, if for all distinguishers D running in time t, the advantage is at most epsilon.</p>
+
+<p>We can use a PRG to construct a stream cipher.<br />
+<img src="https://i.imgur.com/gUHF9ze.png" alt="cipher" /></p>
+
+<p>Instead of the long key we only need the short seed for the PRG.</p>
+
+<h4 id="keystream-generators-ksg">Keystream Generators (KSG)</h4>
+
+<p>Takes as input: seed/key k and initialisation vector IV.<br />
+Output: Infinite stream of bits KS (keystream).</p>
+
+<p>The IV enables many different keystreams to be produced from the single key k.<br />
+IV is typically set to be a counter.<br />
+IV doesn’t have to be secret, it can be sent along with ciphertext.</p>
+
+<p>Encryption/Decryption:<br />
+<img src="https://i.imgur.com/7tyoUXj.png" alt="encryption,decryption" /></p>
+
+<p>KSG Security:<br />
+<img src="https://i.imgur.com/jQikByw.png" alt="kgs" /></p>
+
+<p>A KSG is said to be (q,t,epsilon) secure if all distinguishers running in time t making at most q queries on distinct IVs the advantage is at most epsilon.<br />
+If the adversaries could repeat the IVs then they could distinguish them 100%.</p>
+
+<h2 id="exercise">Exercise</h2>
+
+<h3 id="problem-1-historic-ciphers">Problem 1: Historic ciphers</h3>
+
+<p>a)<br />
+<img src="https://i.imgur.com/2T0ufzg.png" alt="ex.a" /></p>
+
+<p>b)
+<img src="https://i.imgur.com/ifdchLp.png" alt="ex.b" /></p>
+
+<h3 id="problem-2-malleability-of-the-one-time-pad">Problem 2: Malleability of the one-time pad</h3>
+
+<p>The original message is decoded (with the given key):<br />
+“Dear professor, I hated your class so much. It sucked! Sincerely…”</p>
+
+<p>We can find a new key that decodes it to:<br />
+“Dear professor, I loved your class so much. It wasfun! Sincerely…”</p>
+
+<p>“hated” encoded by “bxbpy” becomes “ixutb”</p>
+
+<p>“loved” encoded by “?????” becomes “ixutb”</p>
+
+<p>We can encode “ixutb” by “loved” to get the key.</p>
+
+<p>That gives us “xjzpy”. Which we can tell the professor.</p>
+
+<p>We do the same to change “sucked” to “rocked” which gives us “idvysz” as an encoding.</p>
+
+<p>The whole key would be:</p>
+
+<p>s xjzpy pbtz scomu dn qmhy af idvysz</p>
+
+<p>The whole thing looks like:</p>
+
+<p><img src="https://i.imgur.com/SSC7YCX.png" alt="encoded" /></p>
+
+<h3 id="problem-3-stream-cipher-cryptanalysis">Problem 3: Stream cipher cryptanalysis</h3>
+
+<p>a.)<br />
+Ciphertexts: c0, c1 (same key)
+Plaintexts: (m0,m1) and (m2,m3)</p>
+
+<p>Which set of messages correspond to the ciphertexts?</p>
+
+<ol>
+  <li>
+    <p>XOR ciphertexts –&gt; Get bit string</p>
+  </li>
+  <li>
+    <p>XOR m0 with m1 and m2 with m3 – &gt; Compare values with the bit string</p>
+  </li>
+</ol>
+
+<p>If they match then we know which messages were sent.</p>
+
+<p>Explanation:</p>
+
+<p>Plain Text1: 0001011<br />
+Key        : 1010110<br />
+Ciphertext : 1011101</p>
+
+<p>Plain Text2: 0110011<br />
+Key        : 1010110<br />
+Ciphertext : 1100101</p>
+
+<p>XOR of ciphertexts<br />
+1011101<br />
+1100101<br />
+0111000</p>
+
+<p>XOR of plaintexts (which will match the XOR of the ciphertexts if the messages were encrypted with the key)
+0001011<br />
+0110011<br />
+0111000</p>
+
+<p>m0: 101<br />
+key:100<br />
+C0: 001</p>
+
+<p>m1: 011<br />
+key:100<br />
+c1: 111</p>
+
+<p>m0: 101<br />
+m1: 011<br />
+XOR:110</p>
+
+<p>c0: 001<br />
+c1: 111<br />
+XOR:110</p>
+
+<p>They match!</p>
+
+<p>m1: 111<br />
+m2: 100<br />
+XOR:011</p>
+
+<p>They don’t match!</p>
+
+<p>Does it work in all cases?<br />
+Yes I think so but probably not.</p>
+
+<p>b.)</p>
+
+<p>a        l        p        h        a<br />
+01100001 01101100 01110000 01101000 01100001</p>
+
+<p>b        r        a        v        o<br />
+01100010 01110010 01100001 01110110 01101111</p>
+
+<p>d        e        l        t        a
+01100100 01100101 01101100 01110100 01100001</p>
+
+<p>g        a        m        m        a<br />
+01100111 01100001 01101101 01101101 01100001</p>
+
+:ET
