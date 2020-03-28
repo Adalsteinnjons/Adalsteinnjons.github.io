@@ -1,0 +1,15 @@
+I"<h1 id="week-5">Week 5</h1>
+
+<p>Padding Oracle attacks.<br />
+Error propagates to next plaintext block in CBC mode.</p>
+
+<p><img src="https://i.imgur.com/FQWxI23.png" alt="CBC" /></p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>ta</td>
+    </tr>
+  </tbody>
+</table>
+:ET
