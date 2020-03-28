@@ -11,14 +11,16 @@ title: My Notes
 			<div id="#{{ category_name | slugize }}"></div>
 			<p></p>
 		
-			<h3 class="category-head">{{ category_name }}</h3>
+			<h2 class="category-head">{{ category_name }}</h2>
 			<a name="{{ category_name | slugize }}"></a>
+			<ul class="eth">
 			{% assign sorted = (site.categories[category_name] | sort:'date')  %}
 			{% for post in sorted %}
 			<article class="archive-item">
-			  <h4><a href="{{ site.baseurl }}{{ post.url }}">{{post.title}}</a></h4>
+			  <li><a href="{{ site.baseurl }}{{ post.url }}">{{post.title}}</a></li>
 			</article>
 			{% endfor %}
+			</ul>
 		  </div>
 		{% endfor %}
 		</div>

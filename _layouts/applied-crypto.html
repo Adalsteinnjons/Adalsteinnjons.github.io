@@ -2,15 +2,15 @@
 layout: default
 ---
 <h1>Applied Cryptography</h1>
-{% assign sorted = (site.categories.Applied-Crypto | sort:'date')  %}
+
+
+<ul class="eth">
+  {% assign sorted = (site.categories.Applied-Crypto | sort:'date')  %}
 {% for post in sorted %}
 			<article class="archive-item">
-			  <h4><a href="{{ site.baseurl }}{{ post.url }}">{{post.title}}</a></h4>
+			  <li><a href="{{ site.baseurl }}{{ post.url }}">{{post.title}}</a></li>
 			</article>
-			{% endfor %}
-
-<ul class="posts">
-
+			{% endfor %}  
     
   </ul>
 <div class="post">

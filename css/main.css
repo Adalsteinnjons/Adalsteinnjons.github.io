@@ -41,3 +41,22 @@ ul.posts {
 ul.posts li {
     list-style: none;
 }
+
+ul.eth {
+    -webkit-columns: 2;
+    -moz-columns: 2;
+    columns: 2;
+    -webkit-column-width: 200px;
+     -moz-column-width: 200px;
+          column-width: 200px;
+    list-style-position: inside;
+    list-style-type: none;
+    margin: 20px auto 40px; 
+    font-size: 1.3em;
+
+
+  }
+
+ul.eth li{
+    padding-top: 5px;
+}
