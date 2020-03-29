@@ -1,0 +1,18 @@
+---
+layout: default
+---
+<h1>Algorithms Lab</h1>
+
+
+<ul class="eth">
+  {% assign sorted = (site.categories.Algolab | sort:'date')  %}
+{% for post in sorted %}
+			<article class="archive-item">
+			  <li><a href="{{ site.baseurl }}{{ post.url }}">{{post.title}}</a></li>
+			</article>
+			{% endfor %}  
+    
+  </ul>
+<div class="post">
+  {{ content }}
+</div>

@@ -1,3 +1,6 @@
 name: Adalsteinn Jonsson
 markdown: kramdown
 permalink: /:categories/:title/
+kramdown:
+    highlighter: pygments
+    input: GFM
