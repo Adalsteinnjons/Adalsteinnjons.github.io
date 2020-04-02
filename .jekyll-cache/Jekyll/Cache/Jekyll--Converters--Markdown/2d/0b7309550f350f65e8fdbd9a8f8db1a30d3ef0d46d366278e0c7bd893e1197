@@ -1,4 +1,4 @@
-I"†,<h1 id="high-level-overview-of-topics-first-lecture">High level overview of topics (First Lecture)</h1>
+I"ˆ,<h1 id="high-level-overview-of-topics-first-lecture">High level overview of topics (First Lecture)</h1>
 
 <p>We will focus on applying knowledge and develop intuition in algorithm design.<br />
 Which techniques work for which problem?<br />
@@ -95,7 +95,7 @@ Also possible to use in std::binary_search(v.begin(), v.end(), value) â€“&gt; re
 
 <h3 id="array">Array</h3>
 <p>There are built in arrays, T[], but they should not be used. Instead use std::array. You need to include:</p>
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;array&gt;  
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;array&gt;  
 </span><span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="mi">5</span><span class="o">&gt;</span> <span class="n">a</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">}</span>  
 <span class="n">We</span> <span class="n">can</span> <span class="n">iterate</span> <span class="n">with</span> <span class="p">[</span><span class="n">begin</span><span class="p">(),</span> <span class="n">end</span><span class="p">()]</span>  
 <span class="k">typedef</span> <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="mi">5</span><span class="o">&gt;</span> <span class="n">AI</span><span class="p">;</span>  
