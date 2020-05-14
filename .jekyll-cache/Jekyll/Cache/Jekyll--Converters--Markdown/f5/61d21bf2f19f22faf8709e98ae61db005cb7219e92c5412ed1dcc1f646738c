@@ -1,6 +1,0 @@
-I"¹<h2 id="test">Test</h2>
-
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">gamli</span><span class="dl">"</span><span class="p">;</span>
-<span class="nx">print</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span>
-</code></pre></div></div>
-:ET
